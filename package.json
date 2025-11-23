@@ -1,6 +1,6 @@
 {
   "scripts": {
-     "start": "node -r tsconfig-paths/register -r dotenv/config build/index.js",
+    "start": "node -r tsconfig-paths/register -r dotenv/config build/index.js",
     "build": "tsc",
     "nodemon": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' -r tsconfig-paths/register -r dotenv/config --exec ts-node --files src/index.ts"
   },
@@ -10,10 +10,13 @@
     "express": "^5.1.0",
     "groq-sdk": "^0.36.0",
     "http-status": "^2.1.0",
+    "install": "^0.13.0",
     "joi": "^18.0.2",
     "nodemon": "^3.1.11",
+    "npm": "^11.6.3",
     "openai": "^6.9.1",
     "tsc": "^2.0.4",
+    "typescript": "^5.9.3",
     "winston": "^3.3.3"
   },
   "devDependencies": {
