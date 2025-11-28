@@ -1,11 +1,11 @@
 import OpenAI from 'openai/index.js'
-import { AIWrapperInterface } from './provider-interface'
-import { OPENAI_API_KEY } from '../config/environment-variable.config'
+import { LLMInterface } from './provider-interface'
+import { OPENAI_API_KEY } from '../../config/environment-variable.config'
 import httpStatus from 'http-status'
-import ApiError from '../utility/errors/api.error'
+import ApiError from '../../utility/errors/api.error'
 
-class ChatGPTWrapper implements AIWrapperInterface {
-  private static instance: AIWrapperInterface
+class ChatGPTWrapper implements LLMInterface {
+  private static instance: LLMInterface
   private readonly model: string
   private readonly client: OpenAI
 
@@ -16,7 +16,7 @@ class ChatGPTWrapper implements AIWrapperInterface {
     })
   }
 
-  public static get getInstance(): AIWrapperInterface {
+  public static get getInstance(): LLMInterface {
     if (!this.instance) {
       this.instance = new ChatGPTWrapper()
     }

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import AIFactory from '../../../factory/ai.factory'
+import AIFactory from '../../../factory/llm.factory'
 import ApiError from '../../../utility/errors/api.error'
 import httpStatus from 'http-status'
 

@@ -1,11 +1,11 @@
-import { GEMINI_URL } from '../config/environment-variable.config'
-import { AIWrapperInterface } from './provider-interface'
+import { GEMINI_URL } from '../../config/environment-variable.config'
+import { LLMInterface } from './provider-interface'
 
-class GeminiWrapper implements AIWrapperInterface {
-  private static instance: AIWrapperInterface
+class GeminiWrapper implements LLMInterface {
+  private static instance: LLMInterface
   private static readonly maxTries: number = 5
 
-  public static get getInstance(): AIWrapperInterface {
+  public static get getInstance(): LLMInterface {
     if (!this.instance) {
       this.instance = new GeminiWrapper()
     }

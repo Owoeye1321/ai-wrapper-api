@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request, Response } from 'express'
 import { errorConverter, errorHandler } from './middleware/error-handler.middleware'
 import httpStatus from 'http-status'
 import { APP_PREFIX_PATH } from './config/environment-variable.config'
@@ -6,7 +6,8 @@ import { APP_PREFIX_PATH } from './config/environment-variable.config'
 import ApiError from './utility/errors/api.error'
 import logger from './config/logger'
 import routes from './routes/routes'
-import cors from 'cors'
+const cors = require('cors')
+import LangChain from './providers/agent/langchain'
 
 const app = express()
 
@@ -16,7 +17,7 @@ app.use(express.json())
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (_req, res) => {
+app.get('/', (_req: Request, res: Response) => {
   res.status(httpStatus.OK).send({
     service: `AI Wrapper`,
     message: `Welcome to the AI Wrapper. User magic happens here!`
@@ -40,6 +41,6 @@ app.use((_req, _res, next) => {
 app.use(errorHandler)
 app.use(errorConverter)
 
-app.listen(4000, () => {
+app.listen(4000, async () => {
   logger.info('Server is running on port 4000')
 })
