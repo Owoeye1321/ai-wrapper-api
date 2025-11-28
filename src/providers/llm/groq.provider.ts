@@ -1,15 +1,17 @@
 import { Groq } from 'groq-sdk'
-import { AIWrapperInterface } from './provider-interface'
+import { LLMInterface } from './provider-interface'
+import Pinecoin from '../vector-handler/pinecoin'
+import logger from '@/config/logger'
 
-class GroqWrapper implements AIWrapperInterface {
-  private static instance: AIWrapperInterface
+class GroqWrapper implements LLMInterface {
+  private static instance: LLMInterface
   private readonly client: Groq
 
   private constructor() {
     this.client = new Groq()
   }
 
-  public static get getInstance(): AIWrapperInterface {
+  public static get getInstance(): LLMInterface {
     if (!this.instance) {
       this.instance = new GroqWrapper()
     }
@@ -18,13 +20,30 @@ class GroqWrapper implements AIWrapperInterface {
 
   async prompt(prompt: string): Promise<string> {
     try {
-      const chatCompletion = await this.client.chat.completions.create({
-        messages: [
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
+      const vectorStore = await Pinecoin.getClient()
+      const knowledgeBaseResult = await vectorStore.similaritySearch(prompt)
+      if (knowledgeBaseResult.length === 0) {
+        logger.info('Pinecone: No relevant documents found, updating vector store...')
+        await Pinecoin.storeVector()
+        await this.prompt(prompt)
+      }
+
+      const context = knowledgeBaseResult.map((r) => r.pageContent).join('\n\n')
+
+      // 2. prepare RAG prompt
+      const ragPrompt = `
+        Use the context to answer the question.
+        If the context does not contain the answer, say "I don't know".
+
+        --- CONTEXT ---
+        ${context}
+
+        --- QUESTION ---
+        ${prompt}
+      `
+
+      const llmDeepResult = await this.client.chat.completions.create({
+        messages: [{ role: 'user', content: ragPrompt }],
         model: 'openai/gpt-oss-20b',
         temperature: 1,
         max_completion_tokens: 8192,
@@ -33,9 +52,10 @@ class GroqWrapper implements AIWrapperInterface {
         reasoning_effort: 'medium',
         stop: null
       })
+
       let response: string = ''
 
-      for await (const chunk of chatCompletion) {
+      for await (const chunk of llmDeepResult) {
         const content = chunk.choices[0]?.delta?.content || ''
         response += ` ${content}`
       }

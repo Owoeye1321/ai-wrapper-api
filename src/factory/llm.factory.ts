@@ -1,7 +1,7 @@
-import ChatGPTWrapper from '../providers/chat-gpt.provider'
-import GeminiWrapper from '../providers/gemini.provider'
-import GroqWrapper from '../providers/groq.provider'
-import { AIWrapperInterface } from '../providers/provider-interface'
+import ChatGPTWrapper from '../providers/llm/chat-gpt.provider'
+import GeminiWrapper from '../providers/llm/gemini.provider'
+import GroqWrapper from '../providers/llm/groq.provider'
+import { LLMInterface } from '../providers/llm/provider-interface'
 
 class AIFactory {
   private static instance: AIFactory
@@ -13,7 +13,7 @@ class AIFactory {
     return this.instance
   }
 
-  public getWrapper(provider: string = 'groq'): AIWrapperInterface {
+  public getWrapper(provider: string = 'groq'): LLMInterface {
     switch (provider) {
       case 'openai':
         return ChatGPTWrapper

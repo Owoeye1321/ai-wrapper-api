@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
-    "target": "es2018",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop":false,  // Turn this OFF for ESM
+    "target": "es2020",         // ES2020+ for modern JS
+    "module": "esnext",         // Use ESM output instead of commonjs
     "noImplicitAny": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "outDir": "build",
-    "module": "commonjs",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
