@@ -33,7 +33,7 @@ class GroqWrapper implements LLMInterface {
       // 2. prepare RAG prompt
       const ragPrompt = `
         Use the context to answer the question.
-        If the context does not contain the answer, say "I don't know".
+        If the context does not contain the answer, say "I'm sorry, i only know information about system design as programmed by my creator, Sam.".
 
         --- CONTEXT ---
         ${context}

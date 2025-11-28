@@ -6,8 +6,7 @@ import { APP_PREFIX_PATH } from './config/environment-variable.config'
 import ApiError from './utility/errors/api.error'
 import logger from './config/logger'
 import routes from './routes/routes'
-const cors = require('cors')
-import LangChain from './providers/agent/langchain'
+import cors from 'cors'
 
 const app = express()
 
